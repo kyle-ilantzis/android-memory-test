@@ -21,7 +21,13 @@ public class MainActivity extends AppCompatActivity {
 
         BigArrayHolder bigArrayHolder = (BigArrayHolder) getLastCustomNonConfigurationInstance();
 
-        mBigArrayHolder = bigArrayHolder != null ? bigArrayHolder : BigArrayHolder.newInstance();
+        if ( bigArrayHolder != null ) {
+            Log.d(TAG, "last custom non configuration instance is a BigArrayHolder");
+            mBigArrayHolder = bigArrayHolder;
+        } else {
+            Log.d(TAG, "creating new BigArrayHolder");
+            mBigArrayHolder = BigArrayHolder.newInstance();
+        }
 
         setContentView(R.layout.activity_main);
 
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
+        Log.d(TAG, "onRetainCustomNonConfigurationInstance");
         return mBigArrayHolder;
     }
 
@@ -71,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-        // mBigArrayHolder = null;
-        // System.gc();
+        mBigArrayHolder = null;
+        System.gc();
     }
 
     public static class BigArrayHolder {
